@@ -12,9 +12,4 @@ class DemoApplication
 
 fun main(args: Array<String>) {
 	runApplication<DemoApplication>(*args)
-
-	val context = ClassPathXmlApplicationContext("Beans.xml")
-	val obj = context.getBean("response") as MyResponse
-	System.out.println("-----------Age: ${obj.age}")
-
 }
