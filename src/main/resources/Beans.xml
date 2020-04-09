@@ -10,4 +10,8 @@
         <constructor-arg index="1" value="2"/>
     </bean>
 
+    <bean id = "apk" class = "com.albertsnow.demo.bean.MyApk">
+        <constructor-arg index="0" value="/Users/apple/WorkSpace/demo/raw/translate-3-7.apk"/>
+    </bean>
+
 </beans>
