@@ -1,5 +1,8 @@
 package com.albertsnow.demo.controller
 
+import com.albertsnow.demo.DOWNLOAD_EROOR_FILE_NOT_EXIT
+import com.albertsnow.demo.DOWNLOAD_ERROR_MSG
+import com.albertsnow.demo.DOWNLOAD_SUCCESS_MSG
 import com.albertsnow.demo.bean.MyApk
 import org.slf4j.LoggerFactory
 import org.springframework.context.support.ClassPathXmlApplicationContext
@@ -20,7 +23,7 @@ class DownloadApkController {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     @RequestMapping("/translate.apk")
-    fun home(request: HttpServletRequest, response: HttpServletResponse) {
+    fun home(request: HttpServletRequest, response: HttpServletResponse) : String {
 
         val context = ClassPathXmlApplicationContext("Beans.xml")
         val myApk = context.getBean("apk") as MyApk
@@ -56,9 +59,9 @@ class DownloadApkController {
                     len = inputStream.read(buf)
                 }
             } catch (e: Exception) {
-                logger.error("离线包下载接口异常，e={}", e)
+                logger.error("下载接口异常，e={}", e)
                 response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-                return
+                return DOWNLOAD_ERROR_MSG
             } finally {
                 //结束后释放资源
                 if (inputStream != null) {
@@ -80,9 +83,12 @@ class DownloadApkController {
             }
         } else {
             response.addHeader("Content-Disposition", "No offline package files found")
+            return DOWNLOAD_EROOR_FILE_NOT_EXIT + myApk.filePath?: "not set"
         }
         // 接口调用耗时
         val cost = System.currentTimeMillis() - beginTime
         logger.info("downloadFile end, times={}", cost)
+
+        return DOWNLOAD_SUCCESS_MSG
     }
 }
